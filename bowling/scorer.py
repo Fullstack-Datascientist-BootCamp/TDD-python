@@ -1,2 +1,3 @@
 def score(pins, score_list):
-    return pins
+    scoreSum = sum(score_list)
+    return pins+scoreSum
