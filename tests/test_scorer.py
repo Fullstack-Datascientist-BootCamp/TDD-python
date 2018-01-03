@@ -14,7 +14,7 @@ class TestScore(unittest.TestCase):
         score_list = [3]
         pins = 6
         current_score = score(pins, score_list)
-        self.assertEqual(current_score, 9)
+        self.assertEqual(current_score, 6)
 
 
 if __name__ == "__main__":
