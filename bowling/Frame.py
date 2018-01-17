@@ -1,4 +1,5 @@
 class Frame:
+
     def __init__(self):
         self.itsScore = 0
 
@@ -6,6 +7,5 @@ class Frame:
         return self.itsScore
 
     def add(self, pins):
-        
         self.itsScore += pins
         return self.itsScore

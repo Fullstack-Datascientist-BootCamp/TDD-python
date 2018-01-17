@@ -1,49 +1,35 @@
+from bowling import Score
 
 class Game(object):
-    itsScore = 0
-    itsThrows = []
-    itsCurrentThrow = 0
-    itsCurrentFrame = 1
-    firstThrow = True
+
+    def __init__(self):
+        self.itsScorer = Score.Score()
+        self.itsCurrentFrame = 0
+        self.firstThrowInFrame = True
+
     def score(self):
-        return self.scoreForFrame(self.getCurrentFrame() - 1)
-    
+        return self.scoreForFrame(self.itsCurrentFrame)
+
     def add(self, pins):
-        self.itsThrows.insert(self.itsCurrentThrow, pins) 
-        self.itsCurrentThrow += 1
-        self.itsScore += pins
+        self.itsScorer.addThrow(pins)
         self.adjustCurrentFrame(pins)
 
     def adjustCurrentFrame(self,pins):
-        if(self.firstThrow):
-            if(pins == 10):
-                self.itsCurrentFrame += 1
-            else:
-                self.firstThrow = False
+        if(self.lastBallInFrame(pins)):
+            self.advanceFrame()
+            self.firstThrowInFrame = True
         else:
-            self.firstThrow = True
-            self.itsCurrentFrame += 1
-    
+            self.firstThrowInFrame = False
+
+    def lastBallInFrame(self,pins):
+        return self.strike(pins) or (not self.firstThrowInFrame)
+
+    def strike(self, pins):
+        return (self.firstThrowInFrame and pins == 10)
+
+    def advanceFrame(self):
+        self.itsCurrentFrame += 1
+        self.itsCurrentFrame = min(10,self.itsCurrentFrame)
+
     def scoreForFrame(self, theFrame):
-        score = 0
-        ball = 0
-        for currentFrame in range(theFrame):
-            firstThrow = self.itsThrows[ball] 
-            secondThrow = self.itsThrows[ball + 1]
-            frameScore = firstThrow + secondThrow
-            if(firstThrow == 10):
-                score += 10 + self.itsThrows[ball + 1] + self.itsThrows[ball +2]
-                ball += 1
-            else:
-                if(frameScore == 10):
-                    score += frameScore + self.itsThrows[ball + 2]
-                    ball +=2
-                else:
-                    score += frameScore
-                    ball +=2
-        return score
-    
-    def getCurrentFrame(self):
-#        return 1 + flour((self.itsCurrentThrow - 1)/2)
-       # return ceil(self.itsCurrentThrow/2)
-       return self.itsCurrentFrame
+        return self.itsScorer.scoreForFrame(theFrame)
